@@ -1,0 +1,1 @@
+# impostor-syndrome-comparison-map
