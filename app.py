@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from numpy.random import randint
+from sklearn import cluster
 from plotly import express as px
 import time
 
@@ -35,6 +36,18 @@ PLOT_TITLE_2D_EXP = "Comparison Map - Experience Only"
 PLOT_AXIS_X = "Age"
 PLOT_AXIS_Y = "Years of Experience"
 PLOT_AXIS_Z = "Impostor Syndrome Metric"
+
+def get_labels(algo, features):
+    if algo == "KMEANS":
+        return cluster.KMeans(n_clusters=2,
+                              # n_init="",
+                              #init=
+                              random_state=0).fit(features).labels_
+    elif algo == "DBSCAN":
+        return cluster.DBSCAN().fit(features).labels_
+    elif algo == "MEANSHIFT":
+        return cluster.MeanShift().fit(features).labels_
+    
 
 def scroll_down():
     # added javascript for scrolling down feature
