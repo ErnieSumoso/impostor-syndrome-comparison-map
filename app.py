@@ -27,7 +27,7 @@ IS_MIN_MAX = 0.0, 8.0
 OPTIONS_WEIGHT = [("Disagree", 0.0), ("Mostly Disagree", 0.25), ("Neutral", 0.5), ("Mostly Agree", 0.75), ("Agree", 1.0)]
 JS_SCROLLDOWN = '''
     <script>
-        window.parent.document.querySelector(".main").scrollTop = 5000;
+        window.parent.document.querySelector(".main").scrollTop = 1600;
     </script>
     '''
 PLOT_TITLE_3D = "Impostor Syndrome Comparison Map - 3D"
@@ -36,16 +36,25 @@ PLOT_TITLE_2D_EXP = "Comparison Map - Experience Only"
 PLOT_AXIS_X = "Age"
 PLOT_AXIS_Y = "Years of Experience"
 PLOT_AXIS_Z = "Impostor Syndrome Metric"
+CSV_FILE = "dataset.csv"
+KMEANS_LABEL = "KMeans"
+MEANSHIFT_LABEL = "MeanShift"
+SUBTITLE_SIDE_2 = "Select a Clustering Algorithm:"
+COMPARE_BTN_LABEL = 'Compare Myself!'
+UPLOAD_BTN_LABEL = 'Upload Results!'
+IS_METRIC_LABEL = "My Impostor Syndrome metric is:"
+CLUSTER_A_LABEL = 'Cluster A'
+CLUSTER_B_LABEL = 'Cluster B'
+USER_LABEL = 'You'
+LAYOUT2D_AXIS_AGE = 0
+LAYOUT2D_AXIS_EXP = 1
+UPLOAD_SUCCESS = "Your results were uploaded successfully!"
+UPLOAD_FAILED = "Sorry, there was a problem uploading your results, try later!"
 
 def get_labels(algo, features):
-    if algo == "KMEANS":
-        return cluster.KMeans(n_clusters=2,
-                              # n_init="",
-                              #init=
-                              random_state=0).fit(features).labels_
-    elif algo == "DBSCAN":
-        return cluster.DBSCAN().fit(features).labels_
-    elif algo == "MEANSHIFT":
+    if algo == KMEANS_LABEL:
+        return cluster.KMeans(n_clusters=2).fit(features).labels_
+    elif algo == MEANSHIFT_LABEL:
         return cluster.MeanShift().fit(features).labels_
     
 
@@ -54,29 +63,22 @@ def scroll_down():
     temp_container = st.empty()
     with temp_container:
         st.components.v1.html(JS_SCROLLDOWN)
-        time.sleep(.25)
+        time.sleep(1.25)
     temp_container.empty()
-
-def get_dataframe():
-    # retrieving the dataframe (from a CSV file for now)
-    df = pd.read_csv('test.csv', header=None)
-    return df
 
 def update_dataframe(df, user_input):
     # concat user input into the existing dataframe
     new_row = pd.DataFrame([user_input])
     new_df = pd.concat([df, new_row], axis = 0, ignore_index=True)
-
-    # udpate the CSV file adding the new user input
-    new_df.to_csv('test.csv', header=False, index=False)
     return new_df
 
 
-def plot_figure(df):
+def plot_figure(df, labels):
     # use a scatter 3D to plot the user inputs
-    labels = ['Others' for _ in range(df.shape[0])]
-    labels[-1] = 'You'
-    color_map = {"Others": "blue", "You": "red"}  
+    labels = labels.tolist()
+    labels = list(map(lambda x : CLUSTER_A_LABEL if x == 0 else CLUSTER_B_LABEL, labels))
+    labels[-1] = USER_LABEL
+    color_map = {CLUSTER_A_LABEL: "blue", CLUSTER_B_LABEL: "white", USER_LABEL:"red"}  
     if df.shape[1] == 3:
         return px.scatter_3d(x = df[:,0],
                              y = df[:,1],
@@ -99,22 +101,22 @@ def set_layout_3D(fig):
         )
     )
 
-def set_layout_2D(fig, axis):
+def set_layout_2D(fig, axis_variable):
     # setting the plot layout, axis labels, title, and size
-    if axis == "age":
+    if axis_variable == LAYOUT2D_AXIS_AGE:
         fig.update_layout(
             xaxis_title=PLOT_AXIS_X,
             yaxis_title=PLOT_AXIS_Z
         )
-    elif axis == "exp":
+    elif axis_variable == LAYOUT2D_AXIS_EXP:
         fig.update_layout(
             xaxis_title=PLOT_AXIS_Y,
             yaxis_title=PLOT_AXIS_Z
         )
 
 
-def compare_user(btn_compare, user_input):
-    if btn_compare:
+def compare_user(btn_compare, user_input, algo_selected):
+    if btn_compare or st.session_state.uploaded == 1:
         # update user input database (test csv file for now)
         df = get_dataframe()
         df = update_dataframe(df, user_input)
@@ -123,30 +125,60 @@ def compare_user(btn_compare, user_input):
         df_age = df.drop([1], axis=1)
         df_exp = df.drop([0], axis=1)
 
+        labels = get_labels(algo_selected, df.values)
         # plot updated 3D scatterplot and 2D plots
         st.header(PLOT_TITLE_3D)
-        fig_3d = plot_figure(df.values)
+        fig_3d = plot_figure(df.values, labels)
         set_layout_3D(fig_3d)
         st.plotly_chart(fig_3d)
 
         st.header(PLOT_TITLE_2D_AGE)
-        fig_age = plot_figure(df_age.values)
-        set_layout_2D(fig_age, "age")
+        fig_age = plot_figure(df_age.values, labels)
+        set_layout_2D(fig_age, LAYOUT2D_AXIS_AGE)
         st.plotly_chart(fig_age)
 
         st.header(PLOT_TITLE_2D_EXP)
-        fig_exp = plot_figure(df_exp.values)
-        set_layout_2D(fig_exp, "exp")
+        fig_exp = plot_figure(df_exp.values, labels)
+        set_layout_2D(fig_exp, LAYOUT2D_AXIS_EXP)
         st.plotly_chart(fig_exp)
 
 
         # scroll down to show plot
         scroll_down()
 
+def upload_message():
+    if st.session_state.uploaded == -1:
+        return
+    elif st.session_state.uploaded == 0:
+        st.write(UPLOAD_FAILED)
+    elif st.session_state.uploaded == 1:
+        st.write(UPLOAD_SUCCESS)
+
+
+def get_dataframe():
+    # TODO: get CSV from cloud
+    df = pd.read_csv(CSV_FILE, header=None)
+    return df
+
+
+def upload_results(btn_upload, user_input, compare_user_params):
+    if btn_upload:
+        df_cloud = get_dataframe()
+        df_cloud = update_dataframe(df_cloud, user_input)
+        
+        # TODO: upload df to cloud
+        df_cloud.to_csv(CSV_FILE, header=False, index=False)
+        st.session_state.uploaded = 1 # 0 failed
+        st.experimental_rerun()
+
+
+
 def main():
     # setting the titles
     st.title(TITLE)
     st.subheader(SUBTITLE_MAIN)
+    if 'uploaded' not in st.session_state:
+        st.session_state['uploaded'] = -1
 
     # reading questions from txt file
     file_questions = open(QUESTIONS_FILE, "r")
@@ -177,11 +209,18 @@ def main():
         st.write("I have", exp, "year" + (exp != 1)*"s" + " of experience.")
 
         st.slider(QUESTION_IS, *IS_MIN_MAX, is_metric, disabled=True)
-        st.write("My Impostor Syndrome metric is:", is_metric)
+        st.write(IS_METRIC_LABEL, is_metric)
 
-        btn_compare = st.button('Compare Me!', type="primary")
+        st.subheader(SUBTITLE_SIDE_2)
+        algo_selected = st.selectbox("-", [KMEANS_LABEL, MEANSHIFT_LABEL], label_visibility ="collapsed")
+        btn_compare = st.button(COMPARE_BTN_LABEL, type="primary")
+        btn_upload = st.button(UPLOAD_BTN_LABEL, type="primary", disabled= (st.session_state.uploaded != -1))
+        upload_message()
     
-    compare_user(btn_compare, user_input = [age, exp, is_metric])
+    user_input = [age, exp, is_metric]
+    compare_user_params = {'user_input':user_input, 'algo_selected':algo_selected}
+    compare_user(btn_compare, **compare_user_params)
+    upload_results(btn_upload, user_input, compare_user_params)
 
 if __name__ == "__main__":
     main()
