@@ -4,7 +4,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/ErnieSumoso/impostor-syndrome-comparison-map">
-    <img src="media/project-icon.jpg" alt="Icon" width="80" height="80">
+    <img src="readme-files/project-icon.jpg" alt="Icon" width="80" height="80">
   </a>
 
 <h3 align="center">Impostor Syndrome Comparison Map</h3>
@@ -22,7 +22,7 @@
 ## About The Project
 
 <div align="center">
-  <img src="media/project-showcase.jpg" alt="Showcase" width="400" height="400">
+  <img src="readme-files/project-showcase.jpg" alt="Showcase" width="400" height="400">
 </div>
 Initially created as part of the STEM Fellowship 2024 competition, this repository is planned to be a fully fledged application for Impostor Syndrome comparison including multiple visualizations and clustering algorithms
 to explore. Individuals are encouraged to provide personal information such as age and years of experience in the field, enabling users to attribute their accomplishments to their own ability. Furthermore, our initial data, from a dataset predicting impostor syndrome in medical students, is processed as the basis for our analysis. This initial data is planned to be expanded with online user responses, using a cloud solution to store their inputs. Users can see where those clusters fit in relation to others by viewing them in 2D and 3D scatter plots. Visualizations help to better understand the frequency and the variability of this mental health phenomenon among demographic groups, in addition to quantifying it. As of June 18, 2024, this project is still UNDER DEVELOPMENT.
