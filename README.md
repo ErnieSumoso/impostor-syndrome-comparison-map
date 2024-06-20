@@ -66,8 +66,6 @@ TODO
 Here are some resources that I use for help:
 
 - [Python 3 Documentation](https://docs.python.org/3/)
-- [Stack Overflow](https://stackoverflow.com/)
-- [101 NLP Exercises](https://www.machinelearningplus.com/nlp/nlp-exercises/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
