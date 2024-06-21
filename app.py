@@ -1,7 +1,5 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
-from numpy.random import randint
 from sklearn import cluster
 from plotly import express as px
 import constants as c
