@@ -34,4 +34,3 @@ JS_SCROLLDOWN = '''
         window.parent.document.querySelector(".main").scrollTop = 1600;
     </script>
     '''
-TEST=10

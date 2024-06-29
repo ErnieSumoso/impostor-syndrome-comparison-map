@@ -136,6 +136,7 @@ def get_survey_questions():
     file_questions.close()
     return questions
 
+# main app: contains frornt-end logic
 def main():
 
     # front-end main section: setting the titles
