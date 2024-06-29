@@ -8,6 +8,7 @@
   </a>
 
 <h3 align="center">Impostor Syndrome Comparison Map</h3>
+<h2 aling="center">A comprehensive evaluating and visualization tool</h2>
 
   Impostor syndrome, defined by self-perceived fraudulence, achievement pressure, and negative emotions, creates doubts in one's capacity. This project uses the Young Impostor Syndrome (YIS) scale in a web application to identify symptoms through Likert-scale responses. Users provide personal info, expanding our initial dataset of medical students. We analyze this data using clustering algorithms and present it in 2D/3D scatter plots, highlighting relationships between impostor syndrome traits and demographics. This tool enhances understanding and awareness of impostor syndrome through advanced data analytics and visualizations.
   <p align="center">
