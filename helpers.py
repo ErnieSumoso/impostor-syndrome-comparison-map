@@ -34,7 +34,7 @@ def scroll_down():
 
     # perform the scroll down funcionality
     with temp_container:
-        st.components.v1.html(JS_SCROLLDOWN)
+        st.components.v1.html(c.JS_SCROLLDOWN)
         time.sleep(1.25)
 
     # get rid of the temporary container
