@@ -194,7 +194,7 @@ def main():
 
         # 2 buttons: show the comparison maps, and submit the inputs to the cloud
         btn_compare = st.button(c.COMPARE_BTN_LABEL, type="primary")
-        btn_upload = st.button(c.UPLOAD_BTN_LABEL, type="primary", disabled= (st.session_state.uploaded != -1))
+        # btn_upload = st.button(c.UPLOAD_BTN_LABEL, type="primary", disabled= (st.session_state.uploaded != -1))
 
         # display a success/fail message only if the user submitted his inputs
         upload_message()
