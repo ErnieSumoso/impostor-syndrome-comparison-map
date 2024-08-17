@@ -41,7 +41,7 @@ to explore. Individuals are encouraged to provide personal information such as a
 
 ## Getting Started
 
-TODO
+<!-- TODO -->
 
 ### Prerequisites
 
@@ -62,7 +62,7 @@ To run the code you need to have Python installed on your computer and JupyterLa
 
 ## Usage
 
-TODO
+<!-- TODO -->
 
 Here are some resources that I use for help:
 
