@@ -34,3 +34,4 @@ JS_SCROLLDOWN = '''
         window.parent.document.querySelector(".main").scrollTop = 1550;
     </script>
     '''
+SLEEPING_TIME = 1.25
