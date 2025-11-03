@@ -83,8 +83,6 @@ To run the code you need Python 3 installed and optionally JupyterLab (or Notebo
 - [X] Add 2 clustering algorithms: K-Means and MeanShift algorithms to process the data and visualize results.
 - [X] Enhance and complete the front-end using Streamlit as the final project update.
 
-I am always open to suggestions and solving issues. Please, add them [here](https://github.com/ErnieSumoso/impostor-syndrome-comparison-map/issues).
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
